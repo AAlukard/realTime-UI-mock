@@ -15,11 +15,12 @@ $(document).ready(function() {
     var diagonal = d3.svg.diagonal()
         .projection(function(d) { return [d.y, d.x]; });
 
-    var svg = d3.select("#tree-container").append("svg")
+    var mainSvg = d3.select("#tree-container").append("svg")
         .attr("width", width + margin.right + margin.left)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("height", height + margin.top + margin.bottom);
+
+    var svg = mainSvg.append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // load the external data
     d3.json("js/data/treeData.json", function(error, treeData) {
@@ -51,16 +52,32 @@ $(document).ready(function() {
                 return "translate(" + d.y + "," + d.x + ")";
             });
 
-        nodeEnter.append("circle")
-            .attr("r", 30)
-            .style("fill", "#fff");
 
-        nodeEnter.append("image")
-            .attr("xlink:href", function(d) { return "img/" + d.pic; })
+        nodeEnter.append("defs")
+            .append("pattern")
+            .attr("id", function(d) { return d.id; })
+            .attr("patternUnits", "userSpaceOnUse")
+            .attr("height", "48")
+            .attr("width", "48")
             .attr("x", "-24")
             .attr("y", "-24")
-            .attr("width", "48")
-            .attr("height", "48");
+                .append("image")
+                .attr("x", "0")
+                .attr("y", "0")
+                .attr("height", "48")
+                .attr("width", "48")
+                .attr("xlink:href", function(d) { return "img/" + d.pic; });
+
+        nodeEnter.append("circle")
+            .attr("r", 24)
+            .style("fill", function(d) { return "url(#" + d.id + ")"; });
+
+        //nodeEnter.append("image")
+        //    .attr("xlink:href", function(d) { return "img/" + d.pic; })
+        //    .attr("x", "-24")
+        //    .attr("y", "-24")
+        //    .attr("width", "48")
+        //    .attr("height", "48");
 
         //nodeEnter.append("text")
         //    .attr("x", function (d) {
