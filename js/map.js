@@ -19,7 +19,15 @@ $(document).ready(function() {
             'good': '#ff8e8e',
              defaultFill: 'rgba(23,48,210,0.9)'
         },
-        data: {}
+        data: {},
+        geographyConfig: {
+            popupTemplate: function(geo, data) {
+                return ['<div class="hoverinfo"><strong>',
+                    'Mentions in ' + geo.properties.name,
+                    ': ' + data.mentions,
+                    '</strong></div>'].join('');
+            }
+        }
     });
     election.labels();
     election.legend();

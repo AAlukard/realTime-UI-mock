@@ -3,23 +3,28 @@
   "name": "Top Level",
   "parent": "null",
   "pic": "av_1.jpeg",
+  "message": "Pepsi is cool",
+  "retweets": 90,
   "children": [
     {
       "id": "az2",
       "name": "Level 2: A",
       "parent": "Top Level",
       "pic": "av_2.jpeg",
+      "retweets": 30,
       "children": [
         {
           "id": "az3",
           "name": "Son of A",
           "pic": "av_3.jpeg",
+          "retweets": 20,
           "parent": "Level 2: A"
         },
         {
           "id": "az4",
           "name": "Daughter of A",
           "pic": "av_4.jpeg",
+          "retweets": 60,
           "parent": "Level 2: A"
         }
       ]
@@ -28,6 +33,7 @@
       "id": "az5",
       "name": "Level 2: B",
       "pic": "av_6.jpeg",
+      "retweets": 19,
       "parent": "Top Level"
     }
   ]

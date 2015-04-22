@@ -3,7 +3,7 @@
  */
 $(document).ready(function() {
 
-    var margin = {top: 20, right: 120, bottom: 20, left: 120},
+    var margin = {top: 40, right: 120, bottom: 40, left: 120},
         width = 960 - margin.right - margin.left,
         height = 500 - margin.top - margin.bottom;
 
@@ -13,7 +13,7 @@ $(document).ready(function() {
         .size([height, width]);
 
     var diagonal = d3.svg.diagonal()
-        .projection(function(d) { return [d.y, d.x]; });
+        .projection(function(d) { return [d.x, d.y]; });
 
     var mainSvg = d3.select("#tree-container").append("svg")
         .attr("width", width + margin.right + margin.left)
@@ -21,6 +21,12 @@ $(document).ready(function() {
 
     var svg = mainSvg.append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Define 'div' for tooltips
+    var div = d3.select("body")
+        .append("div")  // declare the tooltip div
+        .attr("class", "tooltip")              // apply the 'tooltip' class
+        .style("opacity", 0);                  // set the opacity to nil
 
 // load the external data
     d3.json("js/data/treeData.json", function(error, treeData) {
@@ -41,7 +47,7 @@ $(document).ready(function() {
 
         // Declare the nodes…
         var node = svg.selectAll("g.node")
-            .data(nodes, function (d) {
+            .data(nodes, function (d) {d
                 return d.id || (d.id = ++i);
             });
 
@@ -49,7 +55,7 @@ $(document).ready(function() {
         var nodeEnter = node.enter().append("g")
             .attr("class", "node")
             .attr("transform", function (d) {
-                return "translate(" + d.y + "," + d.x + ")";
+                return "translate(" + d.x + "," + d.y + ")";
             });
 
 
@@ -70,7 +76,25 @@ $(document).ready(function() {
 
         nodeEnter.append("circle")
             .attr("r", 24)
-            .style("fill", function(d) { return "url(#" + d.id + ")"; });
+            .style("fill", function(d) { return "url(#" + d.id + ")"; })
+            .on("mouseover", function(d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                var content = "";
+                if (d.message) {
+                    content = "<span style='font-weight: bold'>" + d.message + "</span><br/>";
+                }
+
+                content = content + "Retweeted: " + d.retweets;
+
+                div	.html(content)
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+            });
 
         //nodeEnter.append("image")
         //    .attr("xlink:href", function(d) { return "img/" + d.pic; })
